@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Inject, Injectable, UnauthorizedExceptio
 import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt/dist/jwt.service";
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthAdminGuard implements CanActivate {
   constructor(private readonly jwtService: JwtService,private readonly configService:ConfigService) {}
     async canActivate(context: ExecutionContext): Promise<boolean> {
       // here must in request put the token in the header
@@ -22,7 +22,9 @@ export class AuthGuard implements CanActivate {
         const payload = await this.jwtService.verifyAsync(token, {
           secret: this.configService.get<string>('JWT_SECRET'),
         });
-       
+       if (!payload.isAdmin) {
+          throw new UnauthorizedException('You are not authorized to access this resource');
+       }
         
       request['user'] = payload;
       return true;

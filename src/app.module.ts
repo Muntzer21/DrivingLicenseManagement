@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
-import { User } from './user/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
+import { PersonModule } from './person/person.module';
 
 @Module({
   imports: [
@@ -13,20 +11,6 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
       isGlobal: true,
       envFilePath: '.env.development',
      
-    }),
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService)=>
-      {
-        // console.log('config', config.get<string>('JWT_SECRET'));
-       return {
-         global: true,
-         secret: config.get<string>('JWT_SECRET'),
-         signOptions: {
-           expiresIn: config.get<string>('JWT_EXPIRATION'),
-         },
-       };
-      },
     }),
     UserModule,
     TypeOrmModule.forRootAsync({
@@ -40,13 +24,12 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
           port: config.get<number>('DB_PORT'),
           host: 'localhost',
           synchronize: true, //only in development envirment
-          entities: [
-            User,
-          ],
+          entities: ['dist/**/*.entity{.ts,.js}'],
         };
       }
-    })],
-  controllers: [AppController],
-  providers: [AppService],
+    }),
+    PersonModule],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
