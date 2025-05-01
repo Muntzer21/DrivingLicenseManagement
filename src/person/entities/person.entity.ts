@@ -1,6 +1,7 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Gender } from "../enums/geneder";
 import { User } from "src/user/entities/user.entity";
+import { Application } from "src/applications/entities/application.entity";
 
 @Entity({ name: 'people' })
 export class Person {
@@ -36,4 +37,8 @@ export class Person {
 
   @OneToOne(() => User, (user) => user.person)
   user: User; // This will hold the related User entity
+
+  @OneToMany(() => Application, (application) => application.person)
+  // @OneToOne(() => Application, (application) => application.person)
+  aplications: Application[]; // This will hold the related Application entities
 }

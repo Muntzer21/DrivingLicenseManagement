@@ -4,6 +4,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { PersonModule } from './person/person.module';
+import { ApplicationTypesModule } from './application-types/application-types.module';
+import { TestTypesModule } from './test-types/test-types.module';
+import { LicenseClassesModule } from './license-classes/license-classes.module';
+import { ApplicationsModule } from './applications/applications.module';
 
 @Module({
   imports: [
@@ -28,7 +32,11 @@ import { PersonModule } from './person/person.module';
         };
       }
     }),
-    PersonModule],
+    PersonModule,
+    ApplicationTypesModule,
+    TestTypesModule,
+    LicenseClassesModule,
+    ApplicationsModule],
   controllers: [],
   providers: [],
 })
