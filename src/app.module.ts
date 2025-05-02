@@ -8,13 +8,17 @@ import { ApplicationTypesModule } from './application-types/application-types.mo
 import { TestTypesModule } from './test-types/test-types.module';
 import { LicenseClassesModule } from './license-classes/license-classes.module';
 import { ApplicationsModule } from './applications/applications.module';
+import { Application } from './applications/entities/application.entity';
+import { LocalDrivingLicenseApplication } from './applications/entities/LocalDrivingLicenseApplication.entity';
+import { TestAppointmentsModule } from './test-appointments/test-appointments.module';
+import { TestsModule } from './tests/tests.module';
+import { DriverModule } from './driver/driver.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env.development',
-     
     }),
     UserModule,
     TypeOrmModule.forRootAsync({
@@ -30,13 +34,17 @@ import { ApplicationsModule } from './applications/applications.module';
           synchronize: true, //only in development envirment
           entities: ['dist/**/*.entity{.ts,.js}'],
         };
-      }
+      },
     }),
     PersonModule,
     ApplicationTypesModule,
     TestTypesModule,
     LicenseClassesModule,
-    ApplicationsModule],
+    ApplicationsModule,
+    TestAppointmentsModule,
+    TestsModule,
+    DriverModule,
+  ],
   controllers: [],
   providers: [],
 })

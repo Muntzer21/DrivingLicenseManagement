@@ -35,7 +35,9 @@ export class TestTypesService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} testType`;
+    return this.testTypeRepository.findOne({
+      where: { TestTypeID: id }
+    });
   }
 
   

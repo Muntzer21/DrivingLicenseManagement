@@ -9,4 +9,7 @@ export class CreateApplicationDto {
   @IsNumber()
   ApplicationType: number; // ApplicationTypeID
 
+  @IsNumber()
+  LicenseClassId:number; // LicenseClassId
+
 }

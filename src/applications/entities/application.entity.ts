@@ -1,7 +1,8 @@
 import { join } from "path";
 import { ApplicationType } from "src/application-types/entities/application-type.entity";
 import { Person } from "src/person/entities/person.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user/entities/user.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity({ name: 'Applications' })
 export class Application {
   @PrimaryGeneratedColumn()
@@ -14,8 +15,11 @@ export class Application {
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   ApplicationDate: Date;
 
-
-  @OneToOne( () => ApplicationType,(applicationType) => applicationType.application)
+  // one application have multiple application types
+  @ManyToOne(
+    () => ApplicationType,
+    (applicationType) => applicationType.application,
+  )
   @JoinColumn({ name: 'ApplicationTypeID' })
   applicationType: ApplicationType;
 

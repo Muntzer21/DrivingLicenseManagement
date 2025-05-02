@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { TestAppointment } from "src/test-appointments/entities/test-appointment.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'TestTypes' })
 export class TestType {
@@ -10,4 +11,7 @@ export class TestType {
   TestTypeDescription: string;
   @Column({ type: 'integer', default: 0 })
   TestTypeFees: number;
+
+  @OneToMany(() => TestAppointment, (testAppoint) => testAppoint.testType)
+  testAppointments: TestType[]; // This is a self-referencing relationship
 }

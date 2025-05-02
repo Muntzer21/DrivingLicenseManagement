@@ -11,7 +11,9 @@ export class ApplicationsController {
   @UseGuards(AuthAdminGuard)
   @Post('add-application')
   create(@Body() createApplicationDto: CreateApplicationDto,@Req() req: Request) {
-    const userId = req['user'].id; // Assuming the user ID is stored in the request object after authentication
+    const userId = req['user'].UserId; // Assuming the user ID is stored in the request object after authentication
+
+    
     return this.applicationsService.create(createApplicationDto,userId);
   }
 
@@ -20,10 +22,10 @@ export class ApplicationsController {
     return this.applicationsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.applicationsService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.applicationsService.findOne(+id);
+  // }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateApplicationDto: UpdateApplicationDto) {

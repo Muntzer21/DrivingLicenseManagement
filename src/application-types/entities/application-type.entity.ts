@@ -1,5 +1,5 @@
 import { Application } from "src/applications/entities/application.entity";
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'ApplicationTypes' })
 export class ApplicationType {
@@ -11,6 +11,9 @@ export class ApplicationType {
   @Column({ type: 'integer', default: 0 })
   ApplicationFees: number;
 
-  @OneToOne(() => Application, (application) => application.applicationType)
+  @OneToMany(() => Application, (application) => application.applicationType)
   application: Application;
+  // application have multiple application types
+  // @OneToMany(() => Application, (application) => application.applicationType)
+  // app have ont to many relationship with application types
 }

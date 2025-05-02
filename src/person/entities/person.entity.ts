@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typ
 import { Gender } from "../enums/geneder";
 import { User } from "src/user/entities/user.entity";
 import { Application } from "src/applications/entities/application.entity";
+import { Driver } from "src/driver/entities/driver.entity";
 
 @Entity({ name: 'people' })
 export class Person {
@@ -41,4 +42,7 @@ export class Person {
   @OneToMany(() => Application, (application) => application.person)
   // @OneToOne(() => Application, (application) => application.person)
   aplications: Application[]; // This will hold the related Application entities
+
+  @OneToOne(()=>Driver,(driver)=>driver.person)
+  driver: Driver; // This will hold the related Driver entity
 }
