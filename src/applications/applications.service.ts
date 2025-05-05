@@ -35,7 +35,10 @@ export class ApplicationsService {
       relations: { person: true, applicationType: true },
     });
 
-    if (app) {
+    const localDB = await this.findLocalDLOne(app.ApplicationID);
+
+
+    if (app&&localDB.LicenseClassId===createApplicationDto.LicenseClassId) {
       // console.log(app);
 
       throw new BadRequestException(
@@ -48,6 +51,7 @@ export class ApplicationsService {
     if (!person) {
       throw new BadRequestException(`The specified person does not exist.`);
     }
+
 
     // // Create and save the new application
     console.log(CreatedByUser);

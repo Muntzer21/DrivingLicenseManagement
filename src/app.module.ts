@@ -13,6 +13,8 @@ import { LocalDrivingLicenseApplication } from './applications/entities/LocalDri
 import { TestAppointmentsModule } from './test-appointments/test-appointments.module';
 import { TestsModule } from './tests/tests.module';
 import { DriverModule } from './driver/driver.module';
+import { LicenseModule } from './license/license.module';
+import { InternationalLicenseModule } from './international-license/international-license.module';
 
 @Module({
   imports: [
@@ -44,6 +46,8 @@ import { DriverModule } from './driver/driver.module';
     TestAppointmentsModule,
     TestsModule,
     DriverModule,
+    LicenseModule,
+    InternationalLicenseModule,
   ],
   controllers: [],
   providers: [],

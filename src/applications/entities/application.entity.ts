@@ -1,5 +1,7 @@
 import { join } from "path";
 import { ApplicationType } from "src/application-types/entities/application-type.entity";
+import { InternationalLicense } from "src/international-license/entities/international-license.entity";
+import { License } from "src/license/entities/license.entity";
 import { Person } from "src/person/entities/person.entity";
 import { User } from "src/user/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
@@ -31,4 +33,10 @@ export class Application {
 
   @Column({ type: 'integer', default: 0 })
   CreatedByUserID: number; // we can get the user id from the token and add it to the application when we create it
+
+  @OneToMany(() => License, (license) => license.application)
+  license: License; // one to one relation with license table
+
+  @OneToOne(() => InternationalLicense, (internationalLicense) => internationalLicense.application)
+  InternationalLicense: InternationalLicense; // one to one relation with international license table
 }
