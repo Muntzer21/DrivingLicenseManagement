@@ -13,6 +13,11 @@ export class ApplicationTypesService {
     private applicationTypeRepository: Repository<ApplicationType>,
   ) {}
 
+  /**
+   * add type to applications types
+   * @param createApplicationTypeDto for add new application type
+   * @returns insert the new to Database
+   */
   async create(createApplicationTypeDto: CreateApplicationTypeDto) {
     const newApplicationType = await this.applicationTypeRepository.findOneBy({
       ApplicationTypeTitle: createApplicationTypeDto.ApplicationTypeTitle,
@@ -28,10 +33,19 @@ export class ApplicationTypesService {
     };
   }
 
+/**
+ * 
+ * @returns return applications types list
+ */
   findAll() {
     return this.applicationTypeRepository.find();
   }
 
+  /**
+   * find one application type by appTypeID
+   * @param ApplicationTypeID for find appType
+   * @returns application type
+   */
   async findOne(ApplicationTypeID: number) {
     const applicationType = await this.applicationTypeRepository.findOne({
       where: { ApplicationTypeID },
@@ -43,6 +57,12 @@ export class ApplicationTypesService {
     return { msg: 'ApplicationType found successfully', type: applicationType };
   }
 
+  /**
+   * update application type
+   * @param ApplicationTypeID find appType by it
+   * @param updateApplicationTypeDto body for update
+   * @returns update AppType
+   */
   async update(
     ApplicationTypeID: number,
     updateApplicationTypeDto: UpdateApplicationTypeDto,
@@ -58,7 +78,5 @@ export class ApplicationTypesService {
     return {msg : 'ApplicationType updated successfully', type: applicationType};
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} applicationType`;
-  }
+  
 }

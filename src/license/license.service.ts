@@ -16,7 +16,14 @@ export class LicenseService {
     @InjectRepository(License)
     private licenseRepository: Repository<License>,
     private readonly applicationService: ApplicationsService,
-  ) {}
+  ) { }
+  
+  /**
+   * to insert new license in DB
+   * @param createLicenseDto body the new license
+   * @param userId User ID
+   * @returns New License in DB
+   */
   async create(createLicenseDto: CreateLicenseDto, userId: number) {
     const license = await this.licenseRepository.findOne({
       where: { application: { ApplicationID: createLicenseDto.applicationId } },
@@ -41,47 +48,27 @@ export class LicenseService {
     return { 'This action adds a new license': newLicense };
   }
 
+  /**
+   * for license for damaeged
+   * @param licenseID for replace it
+   * @param userId UserID
+   * @returns new License replace for damaged
+   */
   async createLicenseForDamaged(licenseID: number, userId: number) {
-      const license = await this.licenseRepository.findOne({
-        where: { LicenseID: licenseID },
-        relations: { application: true, driver: true },
-      });
-      if (!license) throw new NotFoundException('This license does not exist');
-      const licenseRep = license;
-      await this.licenseRepository.update(
-        { LicenseID: licenseID }, // Find the license by ID
-        { IsActive: false },
-      );
-
-      licenseRep.LicenseID = null;
-      licenseRep.issueReason = 4; // for damaged license
-
-      let newLicense = await this.licenseRepository.create({
-        ...licenseRep,
-        createdByUserID: userId,
-        application: { ApplicationID: license.application.ApplicationID },
-        driver: { DriverID: license.driver.DriverID },
-      });
-      newLicense = await this.licenseRepository.save(newLicense);
-      return { 'This action adds a new license': newLicense };
-  }
-
-  async createLicenseForLost(licenseID: number, userId: number) {
     const license = await this.licenseRepository.findOne({
       where: { LicenseID: licenseID },
       relations: { application: true, driver: true },
     });
     if (!license) throw new NotFoundException('This license does not exist');
     const licenseRep = license;
-     await this.licenseRepository.update(
-       { LicenseID: licenseID }, // Find the license by ID
-       { IsActive: false },
-     );
-  
-    
+    await this.licenseRepository.update(
+      { LicenseID: licenseID }, // Find the license by ID
+      { IsActive: false },
+    );
+
     licenseRep.LicenseID = null;
-    licenseRep.issueReason = 4;// for lost license
-    
+    licenseRep.issueReason = 4; // for damaged license
+
     let newLicense = await this.licenseRepository.create({
       ...licenseRep,
       createdByUserID: userId,
@@ -90,6 +77,51 @@ export class LicenseService {
     });
     newLicense = await this.licenseRepository.save(newLicense);
     return { 'This action adds a new license': newLicense };
+  }
+
+  /**
+   * for license for lost
+   * @param licenseID for replace it
+   * @param userId User ID
+   * @returns new License replace for lost
+   */
+  async createLicenseForLost(licenseID: number, userId: number) {
+    const license = await this.licenseRepository.findOne({
+      where: { LicenseID: licenseID },
+      relations: { application: true, driver: true },
+    });
+    if (!license) throw new NotFoundException('This license does not exist');
+    const licenseRep = license;
+    await this.licenseRepository.update(
+      { LicenseID: licenseID }, // Find the license by ID
+      { IsActive: false },
+    );
+
+    licenseRep.LicenseID = null;
+    licenseRep.issueReason = 4; // for lost license
+
+    let newLicense = await this.licenseRepository.create({
+      ...licenseRep,
+      createdByUserID: userId,
+      application: { ApplicationID: license.application.ApplicationID },
+      driver: { DriverID: license.driver.DriverID },
+    });
+    newLicense = await this.licenseRepository.save(newLicense);
+    return { 'This action adds a new license': newLicense };
+  }
+
+  makeTrue(licenseID: number) {
+    return this.licenseRepository.update(
+      { LicenseID: licenseID }, // Find the license by ID
+      { IsActive: true },
+    );
+  }
+
+  makeFalse(licenseID: number) {
+    return this.licenseRepository.update(
+      { LicenseID: licenseID }, // Find the license by ID
+      { IsActive: false },
+    );
   }
 
   findAll() {

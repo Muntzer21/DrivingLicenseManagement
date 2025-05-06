@@ -11,7 +11,13 @@ export class LicenseClassesService {
   constructor(
     @InjectRepository(LicenseClass)
     private licenseClassRepository: Repository<LicenseClass>,
-  ) {}
+  ) { }
+  
+  /**
+   * insert new license class in list
+   * @param createLicenseClassDto body new license class
+   * @returns new license class
+   */
   async create(createLicenseClassDto: CreateLicenseClassDto) {
     const newLicenseClass = await this.licenseClassRepository.findOneBy({
       ClassName: createLicenseClassDto.ClassName,
@@ -28,6 +34,11 @@ export class LicenseClassesService {
     return this.licenseClassRepository.find();
   }
 
+  /**
+   * find one license class by license class id
+   * @param LicenseClassID for find license class
+   * @returns license class
+   */
   async findOne(LicenseClassID: number) {
     const licenseClass = await this.licenseClassRepository.findOne({
       where: { LicenseClassID },

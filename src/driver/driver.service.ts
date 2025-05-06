@@ -10,7 +10,13 @@ export class DriverService {
   constructor(
     @InjectRepository(Driver)
     private driverRepository: Repository<Driver>,
-  ) {}
+  ) { }
+  /**
+   * to add new driver to DB
+   * @param personId for find person
+   * @param userId USerId
+   * @returns new driver to DB
+   */
   async create(personId:number, userId: number) {
     const newDriver = await this.driverRepository.findOne({ where: { person: { PersonId: personId } } });
     if (newDriver) return 'This driver already exists';

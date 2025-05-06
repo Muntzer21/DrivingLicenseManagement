@@ -15,6 +15,7 @@ import { TestsModule } from './tests/tests.module';
 import { DriverModule } from './driver/driver.module';
 import { LicenseModule } from './license/license.module';
 import { InternationalLicenseModule } from './international-license/international-license.module';
+import { DetainedLicensesModule } from './detained-licenses/detained-licenses.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { InternationalLicenseModule } from './international-license/internationa
     DriverModule,
     LicenseModule,
     InternationalLicenseModule,
+    DetainedLicensesModule,
   ],
   controllers: [],
   providers: [],

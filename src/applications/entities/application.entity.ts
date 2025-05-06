@@ -1,9 +1,7 @@
-import { join } from "path";
 import { ApplicationType } from "src/application-types/entities/application-type.entity";
 import { InternationalLicense } from "src/international-license/entities/international-license.entity";
 import { License } from "src/license/entities/license.entity";
 import { Person } from "src/person/entities/person.entity";
-import { User } from "src/user/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity({ name: 'Applications' })
 export class Application {

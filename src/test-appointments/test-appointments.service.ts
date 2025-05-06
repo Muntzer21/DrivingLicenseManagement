@@ -14,37 +14,53 @@ export class TestAppointmentsService {
   constructor(
     @InjectRepository(TestAppointment)
     private testappointmentRepository: Repository<TestAppointment>,
-    private readonly testTypeService : TestTypesService
+    private readonly testTypeService: TestTypesService,
   ) {}
-  async create(createTestAppointmentDto: CreateTestAppointmentDto, userId: number) {
+
+  /**
+   * add new test appointment
+   * @param createTestAppointmentDto body new test appointment
+   * @param userId User ID
+   * @returns new test appointment in DB
+   */
+  async create(
+    createTestAppointmentDto: CreateTestAppointmentDto,
+    userId: number,
+  ) {
     const testAppointment = await this.testappointmentRepository.findOne({
       where: {
-        localDrivingLicenseApplication: { LocalDrivingLicenseApplicationID: createTestAppointmentDto.localDrivingLicenseApplication },
+        localDrivingLicenseApplication: {
+          LocalDrivingLicenseApplicationID:
+            createTestAppointmentDto.localDrivingLicenseApplication,
+        },
         testType: { TestTypeID: createTestAppointmentDto.testType },
-     
-      }, relations: {testType: true, localDrivingLicenseApplication: true}
+      },
+      relations: { testType: true, localDrivingLicenseApplication: true },
     });
     if (testAppointment) {
       return 'This testAppointment already exists';
     }
 
-     const testAppointmentPerson = await this.testappointmentRepository.findOne({
-       where: {
-         localDrivingLicenseApplication: {
-           LocalDrivingLicenseApplicationID:
-             createTestAppointmentDto.localDrivingLicenseApplication,
-         },
-        
-       },
-       relations: {  localDrivingLicenseApplication: true },
-     });
+    const testAppointmentPerson = await this.testappointmentRepository.findOne({
+      where: {
+        localDrivingLicenseApplication: {
+          LocalDrivingLicenseApplicationID:
+            createTestAppointmentDto.localDrivingLicenseApplication,
+        },
+      },
+      relations: { localDrivingLicenseApplication: true },
+    });
 
-    if (testAppointmentPerson!==null&& !testAppointmentPerson.isLocked) {
-      throw new BadRequestException('This person can not take next test but if pass this test');
+    if (testAppointmentPerson !== null && !testAppointmentPerson.isLocked) {
+      throw new BadRequestException(
+        'This person can not take next test but if pass this test',
+      );
     }
 
-    const testTyp = await this.testTypeService.findOne(createTestAppointmentDto.testType);
-    
+    const testTyp = await this.testTypeService.findOne(
+      createTestAppointmentDto.testType,
+    );
+
     const newTestAppointment = await this.testappointmentRepository.create({
       ...createTestAppointmentDto,
       localDrivingLicenseApplication: {
@@ -59,19 +75,23 @@ export class TestAppointmentsService {
     await this.testappointmentRepository.save(newTestAppointment);
     return { 'This action adds a new testAppointment': newTestAppointment };
     return 'This action adds a new testAppointment';
-  
   }
-    
-    // testAppointment.localDrivingLicenseApplication
-  
+
+
 
   findAll() {
     return `This action returns all testAppointments`;
   }
 
+  /**
+   * find one test appointment 
+   * @param id for find test appointment by test appointment id
+   * @returns new test appointment in DB
+   */
   findOne(id: number) {
     return this.testappointmentRepository.findOne({
-      where: { TestAppointmentID: id },relations:{testType: true, localDrivingLicenseApplication: true}
+      where: { TestAppointmentID: id },
+      relations: { testType: true, localDrivingLicenseApplication: true },
     });
   }
 
@@ -83,15 +103,15 @@ export class TestAppointmentsService {
     return `This action removes a #${id} testAppointment`;
   }
 
+  /**
+   * take test and put is locked true
+   * @param id for find test Appointment by id
+   */
   public async itsTaketest(id: number) {
-
     const testAppointment = await this.testappointmentRepository.findOne({
       where: { TestAppointmentID: id },
     });
     testAppointment.isLocked = true;
     await this.testappointmentRepository.save(testAppointment);
-
-
-
   }
 }

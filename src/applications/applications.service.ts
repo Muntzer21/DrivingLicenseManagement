@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateApplicationDto } from './dto/create-application.dto';
 import { UpdateApplicationDto } from './dto/update-application.dto';
-import { Person } from 'src/person/entities/person.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Application } from './entities/application.entity';
 import { Repository } from 'typeorm';
@@ -18,7 +17,14 @@ export class ApplicationsService {
 
     private readonly personService: PersonService,
     // private personRepository: Repository<Person>,
-  ) {}
+  ) { }
+  
+  /**
+   * for add new application id DB
+   * @param createApplicationDto new Application
+   * @param CreatedByUser User ID
+   * @returns insert new appliation to DB
+   */
   async create(
     createApplicationDto: CreateApplicationDto,
     CreatedByUser: number,
@@ -82,6 +88,11 @@ export class ApplicationsService {
     };
   }
 
+  /**
+   * find one application By appID
+   * @param applicationId for find application 
+   * @returns application
+   */
   findone(applicationId: number) {
     return this.applicationRepository.findOne({
       where: { ApplicationID: applicationId },
@@ -93,6 +104,11 @@ export class ApplicationsService {
     return `This action returns all applications`;
   }
 
+  /**
+   * find local driving license by application id
+   * @param id application id for find local driving license
+   * @returns local driving license
+   */
   findLocalDLOne(id: number) {
     return this.localDrivingLicenseApplicationRepository.findOne({
       where: { ApplicationID: id },

@@ -1,8 +1,9 @@
 import { Application } from "src/applications/entities/application.entity";
+import { DetainedLicense } from "src/detained-licenses/entities/detained-license.entity";
 import { DriverController } from "src/driver/driver.controller";
 import { Driver } from "src/driver/entities/driver.entity";
 import { InternationalLicense } from "src/international-license/entities/international-license.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity({ name: 'Licenses' })
 export class License {
   @PrimaryGeneratedColumn()
@@ -32,4 +33,7 @@ export class License {
 
   @OneToOne(() => InternationalLicense, (internationalLicense) => internationalLicense.license)
   InternationalLicense: InternationalLicense;
+
+  @OneToMany(()=>DetainedLicense,(detainedLicense)=>detainedLicense.license)
+  DetainedLicense: DetainedLicense; // one to many relation with detained license table
 }

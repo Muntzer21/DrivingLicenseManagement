@@ -12,16 +12,38 @@ export class InternationalLicenseService {
   constructor(
     @InjectRepository(InternationalLicense)
     private internationalLicenseRepository: Repository<InternationalLicense>,
-    private readonly licenseService : LicenseService,
+    private readonly licenseService: LicenseService,
   ) {}
-  async create(createInternationalLicenseDto: CreateInternationalLicenseDto, userId: number) {
-    const internationalLicense = await this.internationalLicenseRepository.findOne({ where: { license: { LicenseID: createInternationalLicenseDto.licenseID } } });
-    if(internationalLicense)throw new BadRequestException('This internationalLicense already exists');
-    const license = await this.licenseService.findOne(createInternationalLicenseDto.licenseID);
 
-    if (license.LicenseClass !== 3) throw new BadRequestException('the international license can only be issued for class 3 and the license class id for this person is '+license.LicenseClass);
+  /**
+   * to insert new International License
+   * @param createInternationalLicenseDto body new international license
+   * @param userId UserID
+   * @returns new international license in DB
+   */
+  async create(
+    createInternationalLicenseDto: CreateInternationalLicenseDto,
+    userId: number,
+  ) {
+    const internationalLicense =
+      await this.internationalLicenseRepository.findOne({
+        where: {
+          license: { LicenseID: createInternationalLicenseDto.licenseID },
+        },
+      });
+    if (internationalLicense)
+      throw new BadRequestException('This internationalLicense already exists');
+    const license = await this.licenseService.findOne(
+      createInternationalLicenseDto.licenseID,
+    );
+
+    if (license.LicenseClass !== 3)
+      throw new BadRequestException(
+        'the international license can only be issued for class 3 and the license class id for this person is ' +
+          license.LicenseClass,
+      );
     // console.log(license.application);
-    
+
     let newInternationalLicense =
       await this.internationalLicenseRepository.create({
         ...createInternationalLicenseDto,
@@ -29,11 +51,15 @@ export class InternationalLicenseService {
         license: { LicenseID: createInternationalLicenseDto.licenseID },
         application: { ApplicationID: license.application.ApplicationID },
         driver: { DriverID: license.driver.DriverID },
-      }); 
+      });
 
-  newInternationalLicense = await this.internationalLicenseRepository.save(newInternationalLicense,);
+    newInternationalLicense = await this.internationalLicenseRepository.save(
+      newInternationalLicense,
+    );
     // we dont issue a international license but if driver type class ===3
-    return {'This action adds a new internationalLicense': newInternationalLicense};
+    return {
+      'This action adds a new internationalLicense': newInternationalLicense,
+    };
   }
 
   findAll() {
@@ -44,7 +70,10 @@ export class InternationalLicenseService {
     return `This action returns a #${id} internationalLicense`;
   }
 
-  update(id: number, updateInternationalLicenseDto: UpdateInternationalLicenseDto) {
+  update(
+    id: number,
+    updateInternationalLicenseDto: UpdateInternationalLicenseDto,
+  ) {
     return `This action updates a #${id} internationalLicense`;
   }
 

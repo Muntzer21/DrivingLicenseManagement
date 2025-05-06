@@ -16,6 +16,11 @@ export class UserService {
     private readonly personService: PersonService,
     private readonly jwtService: JwtService,
   ) { }
+  /**
+   * add new user to DB
+   * @param createUserDto body new user
+   * @returns new user in DB
+   */
   async create(createUserDto: CreateUserDto) {
     const person = await this.personService.findOne(createUserDto.PersonId);
 
@@ -45,6 +50,11 @@ export class UserService {
     return { msg: 'user created successfully', user: newUser, accessToken };
   }
 
+  /**
+   * login user to system
+   * @param createUserDto body user
+   * @returns token
+   */
   async login(createUserDto: SignInDto) {
 
 
@@ -74,11 +84,21 @@ export class UserService {
     return { msg: 'login successfully', user,accessToken };
   }
 
+  /**
+   * select all users 
+   * @returns list of user
+   */
   findAll() {
     return this.userReposirty.find({
       relations: { person: true },
     });
   }
+
+  /**
+   * find one user by userID
+   * @param UserId for find the user
+   * @returns user from DB
+   */
   async findOne(UserId: number) {
     const user = await this.userReposirty.findOne({
       where: { UserId },
@@ -88,6 +108,12 @@ export class UserService {
     return user;
   }
 
+  /**
+   * update user
+   * @param UserId for find user by userID
+   * @param updateUserDto body user for update
+   * @returns update user
+   */
   async update(UserId: number, updateUserDto: UpdateUserDto) {
     const user = await this.userReposirty.findOne({ where: { UserId } });
     if (!user) throw new NotFoundException('the user not found');
@@ -97,6 +123,11 @@ export class UserService {
     return { msg: `This action updates a ${updateUserDto.Username} user`, updatedUser };
   }
 
+  /**
+   * for delete user in DB
+   * @param UserId for find user
+   * @returns delete user in DB
+   */
   async remove(UserId: number) {
     const user = await this.userReposirty.findOne({ where: { UserId } });
     if (!user) throw new NotFoundException('the user not found');
@@ -104,6 +135,11 @@ export class UserService {
     return `The user #${user.Username} successfully deleted`;
   }
 
+  /**
+   * find current user
+   * @param UserId for find current user by userid
+   * @returns current
+   */
   async findCurrentUser(UserId: number) {
     const user = await this.userReposirty.findOne({
       where: { UserId },
@@ -114,6 +150,11 @@ export class UserService {
 
   }
 
+  /**
+   * generate new token 
+   * @param payload info in token
+   * @returns new token
+   */
   private async generateToken(payload: any) {
     const token = await this.jwtService.signAsync(payload);
     return token;

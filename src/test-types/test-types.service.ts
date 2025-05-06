@@ -15,7 +15,13 @@ export class TestTypesService {
   constructor(
     @InjectRepository(TestType)
     private readonly testTypeRepository: Repository<TestType>,
-  ) {}
+  ) { }
+  
+  /**
+   * add new test type to list
+   * @param createTestTypeDto body new test type
+   * @returns new test type
+   */
   async create(createTestTypeDto: CreateTestTypeDto) {
     const newTestType =await this.testTypeRepository.findOneBy({
       TestTypeTitle: createTestTypeDto.TestTypeTitle,
@@ -34,6 +40,11 @@ export class TestTypesService {
     return this.testTypeRepository.find();
   }
 
+  /**
+   * find one test type 
+   * @param id for find test type by test type id
+   * @returns test type 
+   */
   findOne(id: number) {
     return this.testTypeRepository.findOne({
       where: { TestTypeID: id }
