@@ -1,6 +1,6 @@
 import { Person } from "src/person/entities/person.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-@Entity('users') // This decorator marks the class as a database entity and specifies the table name
+@Entity('Users') // This decorator marks the class as a database entity and specifies the table name
 export class User {
   @PrimaryGeneratedColumn()
   UserId: number;

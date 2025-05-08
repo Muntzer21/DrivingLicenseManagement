@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { PersonService } from './person.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
@@ -16,7 +16,9 @@ export class PersonController {
 
   @Get()
   @UseGuards(AuthAdminGuard)
-  findAll() {
+  findAll(@Req() req: Request) {
+    console.log(req);
+    
     return this.personService.findAll();
   }
 

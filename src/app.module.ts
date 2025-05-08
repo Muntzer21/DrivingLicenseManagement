@@ -16,6 +16,9 @@ import { DriverModule } from './driver/driver.module';
 import { LicenseModule } from './license/license.module';
 import { InternationalLicenseModule } from './international-license/international-license.module';
 import { DetainedLicensesModule } from './detained-licenses/detained-licenses.module';
+import { ThrottlerModule } from '@nestjs/throttler/dist/throttler.module';
+import { APP_GUARD } from '@nestjs/core/constants';
+import { ThrottlerGuard } from '@nestjs/throttler/dist/throttler.guard';
 
 @Module({
   imports: [
@@ -50,8 +53,17 @@ import { DetainedLicensesModule } from './detained-licenses/detained-licenses.mo
     LicenseModule,
     InternationalLicenseModule,
     DetainedLicensesModule,
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 10000,
+          limit: 3,
+        },
+      ],
+    }),
   ],
   controllers: [],
-  providers: [],
+  providers: [ {provide: APP_GUARD,
+  useClass: ThrottlerGuard}],
 })
 export class AppModule {}
